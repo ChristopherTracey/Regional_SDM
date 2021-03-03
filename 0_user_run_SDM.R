@@ -10,20 +10,20 @@ rm(list=ls())
 # Step 1: Setting for the model run
 
 # species code (from lkpSpecies in modelling database. This will be the new folder name containing inputs/ouptuts)
-model_species <- "chiopalaorga"
+model_species <- "taenmont"
 # loc_scripts is your repository. Make sure your git repository is set to correct branch
 loc_scripts <- here()
 # The main modelling folder for inputs/outputs. All sub-folders are created during the model run (when starting with step 1)
 loc_model <- here("_data", "species")
 # Modeling database
-nm_db_file <- here("_data", "databases", "SDM_lookupAndTracking_AZ.sqlite")
+nm_db_file <- here("_data", "databases", "SDM_lookupAndTracking_chris.sqlite")
 # locations file (presence reaches). Provide full path; File is copied to modeling folder and timestamped.
-#nm_presFile <- here("_data", "occurrence", paste0(model_species, ".shp"))
-nm_presFile <- here("_data", "occurrence", paste0(model_species, ".gpkg"))
+nm_presFile <- here("_data", "occurrence", paste0(model_species, ".shp"))
+#nm_presFile <- here("_data", "occurrence", paste0(model_species, ".gpkg"))
 # env vars location [Terrestrial-only variable]
-loc_envVars = here("_data","env_vars","rasterClipped")
+loc_envVars = here("_data","env_vars","raster", "ras")
 # Name of background/envvars sqlite geodatabase, and base table name (2 length vector)
-nm_bkgPts <- c(here("_data","env_vars","tabular", "background_AZ.sqlite"), "background_pts")
+nm_bkgPts <- c(here("_data","env_vars","tabular", "background_CONUS.sqlite"), "background_pts")
 # HUC spatial data set (shapefile) that is subsetted and used to define modeling area//range
 nm_HUC_file <- here("_data","other_spatial","feature","HUC10.shp")
 # map reference boundaries
@@ -39,7 +39,7 @@ model_comments = ""
 metaData_comments = ""
 
 # your name
-modeller = "Tim Howard"
+modeller = "Christopher Tracey"
 
 # list the algorithms to apply in an ensemble model
 # options currently: "rf" (random forest), 
@@ -47,7 +47,7 @@ modeller = "Tim Howard"
 #                   "xgb" (extreme gradient boosting), 
 #                   [["gam" (generalized additive models) -- no not gam yet]]
 #ensemble_algos = c("rf","me","xgb")
-ensemble_algos = c("rf", "xgb")
+ensemble_algos = c("rf") #, "xgb"
 
 # list non-standard variables to add to model run
 add_vars = NULL
@@ -126,7 +126,7 @@ library(here)
 rm(list=ls())
 
 # set project folder and species code for this run
-model_species <- "anaxreti"
+model_species <- "taenmont"
 loc_model <- here("_data", "species")
 
 # set wd and load function
@@ -184,7 +184,7 @@ rm(list=ls())
 
 # for scripts 1-3, run just the following 3 lines
 
-model_species <- "anaxreti"
+model_species <- "taenmont"
 
 load(here("_data","species",model_species,"runSDM_paths_most_recent.Rdata"))
 # if you want an earlier run, enter it and load it here:

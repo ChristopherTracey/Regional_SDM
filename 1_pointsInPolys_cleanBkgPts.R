@@ -230,8 +230,8 @@ op <- options()
 options(useFancyQuotes = FALSE) #need straight quotes for query
 # get the background data from the DB
 db <- dbConnect(SQLite(), nm_bkgPts[1])
-#qry <- paste0("SELECT * from ", nm_bkgPts[2], " where substr(huc12,1,10) IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
-qry <- paste0("SELECT * from ", nm_bkgPts[2], " where huc10 IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
+qry <- paste0("SELECT * from ", nm_bkgPts[2], " where substr(huc12,1,10) IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
+#qry <- paste0("SELECT * from ", nm_bkgPts[2], " where huc10 IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
 bkgd <- dbGetQuery(db, qry)
 tcrs <- dbGetQuery(db, paste0("SELECT proj4string p from lkpCRS where table_name = '", nm_bkgPts[2], "';"))$p
 samps <- st_sf(bkgd, geometry = st_as_sfc(bkgd$wkt, crs = tcrs))
@@ -260,12 +260,12 @@ tmpTableName <- paste0(nm_bkgPts[2], "_", baseName)
 dbWriteTable(db, tmpTableName, backgSubset, overwrite = TRUE)
 
 # do the join, get all the data back down
-# qry <- paste0("SELECT ", tmpTableName, ".huc12, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
-#            " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
-#               tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
-qry <- paste0("SELECT ", tmpTableName, ".huc10, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
-              " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
+qry <- paste0("SELECT ", tmpTableName, ".huc12, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*",            
+              " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",                
               tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
+#qry <- paste0("SELECT ", tmpTableName, ".huc10, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
+   #           " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
+    #          tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
 bgSubsAtt <- dbGetQuery(db, qry)
 # delete the table on the db
 dbRemoveTable(db, tmpTableName)
