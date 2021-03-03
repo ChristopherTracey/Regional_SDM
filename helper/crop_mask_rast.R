@@ -59,20 +59,20 @@ if(FALSE %in% st_is_valid(rangeClipped)){
 }
 
 st_write(rangeClipped, delete_dsn = TRUE,
-         here("_data","species",model_species,"inputs","model_input",paste0(model_run_name, "_studyArea.gpkg")))
+         here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")))
 
   
 ## crop/mask rasters to a temp directory ----
 
 # delete temp rasts folder, create new
-temp <- paste0(options("rasterTmpDir")[1], "/", modelrun_meta_data$model_run_name)
+temp <- paste0(options("rasterTmpDir")[1], "/", baseName)
 if (dir.exists(temp)) {
   unlink(x = temp, recursive = TRUE, force = TRUE)
 }
 dir.create(temp, showWarnings = FALSE)
 
 # get proj info from 1 raster
-rtemp <- raster(paste0(loc_envVars,"/",fullL[[1]]))
+rtemp <- raster(fullL[[1]])
 
 # if debugging with already clipped rasters, paste the tmp path in
 #newL <- lapply(fullL, FUN = function(x) paste0(temp,"/",x))
