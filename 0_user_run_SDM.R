@@ -30,7 +30,7 @@ nm_HUC_file <- here("_data","other_spatial","feature","HUC10.shp")
 nm_refBoundaries = here("_data","other_spatial","feature", "US_States.shp")  # background grey reference lines in map
 
 # project overview - this appears in the first paragraph of the metadata
-project_overview = "This model was developed for the Arizona Game and Fish Department."
+project_overview = "This model was developed for the Pennsylvania Natural Heritage Program."
 
 # model comment in database
 model_comments = ""
@@ -54,12 +54,12 @@ add_vars = NULL
 # list standard variables to exclude from model run
 remove_vars = NULL
 
-remove_vars = c("nlcdopn1", "nlcdopn10", "nlcdopn100", "impsur1", "impsur10", "impsur100",
-  "ntm_1_01", "ntm_1_02", "ntm_1_06", "ntm_1_08", "ntm_1_09", "ntm_2_01",
-  "ntm_2_02", "ntm_2_05", "ntm_2_06", "ntm_3_01", "ntm_3_03", "ntm_3_09",
-  "ntm_3_12", "ntm_4_01", "ntm_4_02", "ntm_4_03", "ntm_4_05", "ntm_4_06",
-  "ntm_5_01", "ntm_6_01", "ntm_6_02", "ntm_6_03", "ntm_6_04", "nlcdshb1",
-  "nlcdshb10", "nlcdshb100")
+#remove_vars = c("nlcdopn1", "nlcdopn10", "nlcdopn100", "impsur1", "impsur10", "impsur100",
+  # "ntm_1_01", "ntm_1_02", "ntm_1_06", "ntm_1_08", "ntm_1_09", "ntm_2_01",
+  # "ntm_2_02", "ntm_2_05", "ntm_2_06", "ntm_3_01", "ntm_3_03", "ntm_3_09",
+  # "ntm_3_12", "ntm_4_01", "ntm_4_02", "ntm_4_03", "ntm_4_05", "ntm_4_06",
+  # "ntm_5_01", "ntm_6_01", "ntm_6_02", "ntm_6_03", "ntm_6_04", "nlcdshb1",
+  # "nlcdshb10", "nlcdshb100")
 
 
 # do you want to stop execution after each modeling step (script)?

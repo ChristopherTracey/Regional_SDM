@@ -105,6 +105,7 @@ shrtNms <- merge(data.frame(fileName = raslist.short), evs)
 # get the env vars used by df.in
 # assumes all env vars in df.in are accounted for by DB and in ras folders
 shrtNms <- shrtNms[tolower(shrtNms$gridName) %in% names(df.in),]
+####shrtNms <- shrtNms[gsub('.{4}$', '', tolower(shrtNms$fileName)) %in% names(df.in),] #$gridName
 
 # trust that the desired env vars are in df.in
 rasnames <- tolower(shrtNms$gridName)
