@@ -102,8 +102,8 @@ gridlistSub <- gridlistSub[!duplicated(gridlistSub),]
 fullL <- gridlist[names(gridlist) %in% tolower(gridlistSub$gridName)]
 
 # Could use this script here crop/mask rasters
- source(paste0(loc_scripts, "/helper/crop_mask_rast.R"), local = TRUE)
- envStack <- stack(newL)
+ #source(paste0(loc_scripts, "/helper/crop_mask_rast.R"), local = TRUE)
+ envStack <- stack(fullL) #stack(newL)
 
 # 
 # x <- fullL[1:50]

@@ -72,7 +72,7 @@ names(fullL) <- rasFiles$gridName
 
 
 #####source(paste0(loc_scripts, "/helper/crop_mask_rast.R"), local = FALSE)
-envStack <- stack(newL)
+envStack <- stack(fullL)
 
 #envStack <- stack(fullL) # if not using helper/crop_mask_rast.R
 rm(fullL)

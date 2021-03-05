@@ -21,7 +21,7 @@ nm_db_file <- here("_data", "databases", "SDM_lookupAndTracking_chris.sqlite")
 nm_presFile <- here("_data", "occurrence", paste0(model_species, ".shp"))
 #nm_presFile <- here("_data", "occurrence", paste0(model_species, ".gpkg"))
 # env vars location [Terrestrial-only variable]
-loc_envVars = here("_data","env_vars","raster", "ras")
+loc_envVars = "D:/R_tmp/taenmont_20210304_134229" ##here("_data","env_vars","raster", "ras")
 # Name of background/envvars sqlite geodatabase, and base table name (2 length vector)
 nm_bkgPts <- c(here("_data","env_vars","tabular", "background_CONUS.sqlite"), "background_pts")
 # HUC spatial data set (shapefile) that is subsetted and used to define modeling area//range
@@ -47,20 +47,19 @@ modeller = "Christopher Tracey"
 #                   "xgb" (extreme gradient boosting), 
 #                   [["gam" (generalized additive models) -- no not gam yet]]
 #ensemble_algos = c("rf","me","xgb")
-ensemble_algos = c("rf") #, "xgb"
+ensemble_algos = c("rf", "xgb") #
 
 # list non-standard variables to add to model run
 add_vars = NULL
 # list standard variables to exclude from model run
 remove_vars = NULL
 
-#remove_vars = c("nlcdopn1", "nlcdopn10", "nlcdopn100", "impsur1", "impsur10", "impsur100",
-  # "ntm_1_01", "ntm_1_02", "ntm_1_06", "ntm_1_08", "ntm_1_09", "ntm_2_01",
-  # "ntm_2_02", "ntm_2_05", "ntm_2_06", "ntm_3_01", "ntm_3_03", "ntm_3_09",
-  # "ntm_3_12", "ntm_4_01", "ntm_4_02", "ntm_4_03", "ntm_4_05", "ntm_4_06",
-  # "ntm_5_01", "ntm_6_01", "ntm_6_02", "ntm_6_03", "ntm_6_04", "nlcdshb1",
-  # "nlcdshb10", "nlcdshb100")
-
+remove_vars = c("nlcdopn1", "nlcdopn10", "nlcdopn100", "impsur1", "impsur10", "impsur100",
+"ntm_1_01", "ntm_1_02", "ntm_1_06", "ntm_1_08", "ntm_1_09", "ntm_2_01",
+"ntm_2_02", "ntm_2_05", "ntm_2_06", "ntm_3_01", "ntm_3_03", "ntm_3_09",
+"ntm_3_12", "ntm_4_01", "ntm_4_02", "ntm_4_03", "ntm_4_05", "ntm_4_06",
+"ntm_5_01", "ntm_6_01", "ntm_6_02", "ntm_6_03", "ntm_6_04", "nlcdshb1",
+"nlcdshb10", "nlcdshb100")
 
 # do you want to stop execution after each modeling step (script)?
 prompt = FALSE
@@ -139,8 +138,8 @@ source(here("helper", "run_SDM.R"))
   # to add/remove variables, begin at step 2
   # to just run new model, begin at step 3 (see next example)
 run_SDM(
-  begin_step = "2",
-  model_species = "eriogyps",
+  begin_step = "4",
+  model_species = "taenmont",
   loc_model = loc_model,
   loc_scripts = loc_scripts
 )
@@ -161,8 +160,8 @@ run_SDM(
 # example pick-up a model run at step 4c (metadata/comment update)
 # if starting at step 4 or later, must provide model run name to model_rdata
 run_SDM(
-  begin_step = "4b",
-  model_species = "amsothar",
+  begin_step = "5",
+  model_species = "taenmont",
   loc_model = loc_model,
   loc_scripts = loc_scripts,
   model_rdata = max(list.files(here("_data","species",model_species,"outputs","rdata")))
