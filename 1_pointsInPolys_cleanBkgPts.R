@@ -226,6 +226,42 @@ hucList <- dbGetQuery(db, statement = SQLquery)$huc10_id
 dbDisconnect(db)
 rm(db)
 
+
+####
+# now get that info spatially
+nm_range <- nm_HUC_file
+qry <- paste("SELECT * from HUC10 where HUC10 IN ('", paste(hucList, collapse = "', '"), "')", sep = "")
+hucRange <- st_zm(st_read(nm_range, query = qry))
+
+# dissolve it
+rangeDissolved <- st_union(hucRange)
+# fill holes/slivers
+rangeDissHolesFilled <- smoothr::fill_holes(rangeDissolved, threshold = units::set_units(10, km^2))
+# crop to CONUS boundary
+# use the dissolved version
+conus <- st_read(paste0(strsplit(nm_refBoundaries, "[.]")[[1]][[1]], "_dissolve.shp"))
+#conus <- st_read(nm_refBoundaries)
+rangeClipped <- st_intersection(rangeDissHolesFilled, conus)
+#dissolve again (if not using the dissolved version)
+#rangeDissolved_2 <- st_union(rangeClipped)
+# write out a dissolved version of hucRange for 'study area'
+
+rm(hucRange, rangeDissolved, rangeDissHolesFilled, conus)
+
+
+#check if shape is valid
+if(FALSE %in% st_is_valid(rangeClipped)){
+  # st_make_valid not available to this install
+  rangeClipped <- st_buffer(rangeClipped, 0)
+}
+
+st_write(rangeClipped, delete_dsn = TRUE,
+         here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")))
+
+####
+
+
+
 op <- options()
 options(useFancyQuotes = FALSE) #need straight quotes for query
 # get the background data from the DB
@@ -237,6 +273,9 @@ tcrs <- dbGetQuery(db, paste0("SELECT proj4string p from lkpCRS where table_name
 samps <- st_sf(bkgd, geometry = st_as_sfc(bkgd$wkt, crs = tcrs))
 options(op)
 rm(op)
+
+
+
 
 # find coincident points ----
 polybuff <- st_transform(shp_expl, st_crs(samps))
