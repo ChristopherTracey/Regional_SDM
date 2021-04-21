@@ -256,7 +256,7 @@ if(FALSE %in% st_is_valid(rangeClipped)){
 }
 
 st_write(rangeClipped, delete_dsn = TRUE,
-         here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")))
+         here::here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")))
 
 ####
 
