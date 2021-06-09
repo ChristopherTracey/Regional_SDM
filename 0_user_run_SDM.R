@@ -1,7 +1,7 @@
 # File: user_run_SDM.r
 # Purpose: Run a new, full SDM model (all steps)
-library(checkpoint)
-checkpoint("2020-04-22", scanForPackages = FALSE)
+#library(checkpoint)
+#checkpoint("2020-04-22", scanForPackages=TRUE)
 
 library(here)
 rm(list=ls())
@@ -10,7 +10,7 @@ rm(list=ls())
 # Step 1: Setting for the model run
 
 # species code (from lkpSpecies in modelling database. This will be the new folder name containing inputs/ouptuts)
-model_species <- "taenmont"
+model_species <- "hydrcana"
 # loc_scripts is your repository. Make sure your git repository is set to correct branch
 loc_scripts <- here()
 # The main modelling folder for inputs/outputs. All sub-folders are created during the model run (when starting with step 1)
@@ -21,7 +21,7 @@ nm_db_file <- here("_data", "databases", "SDM_lookupAndTracking_chris.sqlite")
 nm_presFile <- here("_data", "occurrence", paste0(model_species, ".shp"))
 #nm_presFile <- here("_data", "occurrence", paste0(sub("-","_",model_species), ".gpkg"))
 # env vars location [Terrestrial-only variable]
-loc_envVars = "D:/R_tmp/taenmont_20210304_134229" ##here("_data","env_vars","raster", "ras")
+loc_envVars = here("_data","env_vars","raster", "ras") # "D:/R_tmp/taenmont_20210304_134229"
 # Name of background/envvars sqlite geodatabase, and base table name (2 length vector)
 nm_bkgPts <- c(here("_data","env_vars","tabular", "background_CONUS.sqlite"), "background_pts")
 # HUC spatial data set (shapefile) that is subsetted and used to define modeling area//range
@@ -65,14 +65,8 @@ ensemble_algos = c("rf", "xgb") #
 # list non-standard variables to add to model run
 add_vars = NULL
 # list standard variables to exclude from model run
-#remove_vars = NULL
-# vars with road signatures
-remove_vars = c("nlcdopn1", "nlcdopn10", "nlcdopn100", "impsur1", "impsur10", "impsur100",
-"ntm_1_01", "ntm_1_02", "ntm_1_06", "ntm_1_08", "ntm_1_09", "ntm_2_01",
-"ntm_2_02", "ntm_2_05", "ntm_2_06", "ntm_3_01", "ntm_3_03", "ntm_3_09",
-"ntm_3_12", "ntm_4_01", "ntm_4_02", "ntm_4_03", "ntm_4_05", "ntm_4_06",
-"ntm_5_01", "ntm_6_01", "ntm_6_02", "ntm_6_03", "ntm_6_04", "nlcdshb1",
-"nlcdshb10", "nlcdshb100")
+#remove_vars = NULL #
+remove_vars = c("lowslope1","lowslope10","lwslpcl1","lwslpcl10","lwslpflt1","lwslpflt10","lwslpwrm1","lwslpwrm10","peak1","peak10","peakcool1","peakcool10","peakwarm1","peakwarm10","upslope1","upslope10","upslpcl1","upslpcl10","upslpflt1","upslpflt10","upslpwrm1","upslpwrm10","mountain1","mountain10","cliff1","cliff10","valley1","valley10","vallynrw1","vallynrw10")
 
 # do you want to stop execution after each modeling step (script)?
 prompt = FALSE
@@ -140,7 +134,7 @@ library(here)
 rm(list=ls())
 
 # set project folder and species code for this run
-model_species <- "taenmont"
+model_species <- "euphpurp"
 loc_model <- here("_data", "species")
 
 # set wd and load function
@@ -166,7 +160,7 @@ run_SDM(
   # if starting at step 4 or later, must provide model run name to model_rdata
 run_SDM(
   begin_step = "4",
-  model_species = "leoppard",
+  model_species = "euphpurp",
   loc_model = loc_model,
   loc_scripts = loc_scripts,
   model_rdata = max(list.files(here("_data","species",model_species,"outputs","rdata"))),
@@ -190,8 +184,8 @@ run_SDM(
 ##########
 
 # TESTING / DEBUGGING ONLY
-library(checkpoint)
-checkpoint("2020-04-22", scanForPackages = FALSE)
+#library(checkpoint)
+#checkpoint("2020-04-22", scanForPackages = FALSE)
 
 library(here)
 rm(list=ls())
@@ -200,7 +194,7 @@ rm(list=ls())
 # so you need to have started a run_SDM() run in step 2 first.
 
 # for scripts 1-3, run just the following 3 lines
-model_species <- "taenmont"
+model_species <- "hydrcana"
 
 load(here("_data","species",model_species,"runSDM_paths_most_recent.Rdata"))
 # if you want an earlier run, enter it and load it here:
