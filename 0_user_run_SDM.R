@@ -8,7 +8,7 @@ rm(list=ls())
 # Step 1: Setting for the model run
 
 # species code (from lkpSpecies in modelling database. This will be the new folder name containing inputs/ouptuts)
-model_species <- "careroan"
+model_species <- "heucalba"
 # loc_scripts is your repository. Make sure your git repository is set to correct branch
 loc_scripts <- here()
 # The main modelling folder for inputs/outputs. All sub-folders are created during the model run (when starting with step 1)
@@ -132,7 +132,7 @@ library(here)
 rm(list=ls())
 
 # set project folder and species code for this run
-model_species <- "euphpurp"
+model_species <- "trifvirg"
 loc_model <- here("_data", "species")
 
 # set wd and load function
@@ -192,7 +192,7 @@ rm(list=ls())
 # so you need to have started a run_SDM() run in step 2 first.
 
 # for scripts 1-3, run just the following 3 lines
-model_species <- "hydrcana"
+model_species <- "heucalba"
 
 load(here("_data","species",model_species,"runSDM_paths_most_recent.Rdata"))
 # if you want an earlier run, enter it and load it here:
