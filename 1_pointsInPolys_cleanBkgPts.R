@@ -229,17 +229,56 @@ hucList <- dbGetQuery(db, statement = SQLquery)$huc10_id
 dbDisconnect(db)
 rm(db)
 
+
+####
+# now get that info spatially
+nm_range <- nm_HUC_file
+qry <- paste("SELECT * from HUC10 where HUC10 IN ('", paste(hucList, collapse = "', '"), "')", sep = "")
+hucRange <- st_zm(st_read(nm_range, query = qry))
+
+# dissolve it
+rangeDissolved <- st_union(hucRange)
+# fill holes/slivers
+rangeDissHolesFilled <- smoothr::fill_holes(rangeDissolved, threshold = units::set_units(10, km^2))
+# crop to CONUS boundary
+# use the dissolved version
+conus <- st_read(paste0(strsplit(nm_refBoundaries, "[.]")[[1]][[1]], "_dissolve.shp"))
+#conus <- st_read(nm_refBoundaries)
+rangeClipped <- st_intersection(rangeDissHolesFilled, conus)
+#dissolve again (if not using the dissolved version)
+#rangeDissolved_2 <- st_union(rangeClipped)
+# write out a dissolved version of hucRange for 'study area'
+
+rm(hucRange, rangeDissolved, rangeDissHolesFilled, conus)
+
+
+#check if shape is valid
+if(FALSE %in% st_is_valid(rangeClipped)){
+  # st_make_valid not available to this install
+  rangeClipped <- st_buffer(rangeClipped, 0)
+}
+
+st_write(rangeClipped, delete_dsn = TRUE,
+         here::here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")))
+
+####
+
+
+
 op <- options()
 options(useFancyQuotes = FALSE) #need straight quotes for query
 # get the background data from the DB
 db <- dbConnect(SQLite(), nm_bkgPts[1])
-#qry <- paste0("SELECT * from ", nm_bkgPts[2], " where substr(huc12,1,10) IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
-qry <- paste0("SELECT * from ", nm_bkgPts[2], " where huc10 IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
+qry <- paste0("SELECT * from ", nm_bkgPts[2], " where substr(huc12,1,10) IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
+#qry <- paste0("SELECT * from ", nm_bkgPts[2], " where huc10 IN (", paste(sQuote(hucList), collapse = ", ", sep = "")," );")
 bkgd <- dbGetQuery(db, qry)
 tcrs <- dbGetQuery(db, paste0("SELECT proj4string p from lkpCRS where table_name = '", nm_bkgPts[2], "';"))$p
 samps <- st_sf(bkgd, geometry = st_as_sfc(bkgd$wkt, crs = tcrs))
 options(op)
 rm(op)
+
+
+
 
 # find coincident points ----
 polybuff <- st_transform(shp_expl, st_crs(samps))
@@ -394,12 +433,12 @@ tmpTableName <- paste0(nm_bkgPts[2], "_", baseName)
 dbWriteTable(db, tmpTableName, backgSubset, overwrite = TRUE)
 
 # do the join, get all the data back down
-# qry <- paste0("SELECT ", tmpTableName, ".huc12, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
-#            " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
-#               tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
-qry <- paste0("SELECT ", tmpTableName, ".huc10, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
-              " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
+qry <- paste0("SELECT ", tmpTableName, ".huc12, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*",            
+              " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",                
               tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
+#qry <- paste0("SELECT ", tmpTableName, ".huc10, ", tmpTableName, ".wkt, ", nm_bkgPts[2], "_att.*", 
+   #           " from ", tmpTableName, " INNER JOIN ", nm_bkgPts[2], "_att on ",
+    #          tmpTableName,".fid = ", nm_bkgPts[2], "_att.fid;")
 bgSubsAtt <- dbGetQuery(db, qry)
 # delete the table on the db
 dbRemoveTable(db, tmpTableName)

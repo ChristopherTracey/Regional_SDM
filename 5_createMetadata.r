@@ -69,18 +69,18 @@ dbDisconnect(db)
 # but background inputs vary
 summ.table <- data.frame(
   Sample=c("Presence locations (groups)",
-        "Subsamples within groups",
-        "Total presence inputs",
-        paste0("Background inputs - ", inputs$algorithm)),
+           "Subsamples within groups",
+           "Total presence inputs",
+           paste0("Background inputs - ", inputs$algorithm)),
   Count=c(
     ifelse(inputs$jckn_grp_column[[1]] == "stratum", 
            inputs$feat_count[[1]],
            inputs$feat_grp_count[[1]]
-           ),
+    ),
     inputs$mn_grp_subsamp[[1]],
     inputs$tot_obs_subsamp[[1]],
     paste0(inputs$tot_bkgd_subsamp)
-     ))
+  ))
 # summ.table is what gets used in knitr file
 rm(db, sql)
 
@@ -131,46 +131,46 @@ vuStatsList <- lapply(vuStatsList, FUN = function(x) x[,!names(x)=="algo"])
 for(algo in names(vuStatsList)){
   if(algo == "me"){
     algodat <- data.frame(Name = c("linear feature type used",
-                                 "product feature type used",
-                                 "quadratic feature type used",
-                                 "hinge feature type used"),
-               value = c("yes","yes","yes","yes"))
+                                   "product feature type used",
+                                   "quadratic feature type used",
+                                   "hinge feature type used"),
+                          value = c("yes","yes","yes","yes"))
     vuStatsList[[algo]] <- rbind(vuStatsList[[algo]], algodat)
   }
   if(algo == "xgb"){
     algodat <- data.frame(Name = c(
-                                  "iterations",
-                                  "eta",
-                                  "max depth",
-                                  "gamma",
-                                  "colsample by tree",
-                                  "min child weight",
-                                  "subsample",
-                                  "objective"),
-                         value = c(
-                                   xgb.full$niter,
-                                   xgb.full$params$eta,
-                                   xgb.full$params$max_depth,
-                                   xgb.full$params$gamma,
-                                   xgb.full$params$colsample_bytree,
-                                   xgb.full$params$min_child_weight,
-                                   xgb.full$params$subsample,
-                                   xgb.full$params$objective
-                                   ))
+      "iterations",
+      "eta",
+      "max depth",
+      "gamma",
+      "colsample by tree",
+      "min child weight",
+      "subsample",
+      "objective"),
+      value = c(
+        xgb.full$niter,
+        xgb.full$params$eta,
+        xgb.full$params$max_depth,
+        xgb.full$params$gamma,
+        xgb.full$params$colsample_bytree,
+        xgb.full$params$min_child_weight,
+        xgb.full$params$subsample,
+        xgb.full$params$objective
+      ))
     #paste0(deparse(xgb.full$call), collapse = ""),
     vuStatsList[[algo]] <- rbind(vuStatsList[[algo]], algodat)
   }
   if(algo == "rf"){
     algodat <- data.frame(Name = c(
-                                "mtry",
-                                "number of trees",
-                                "type of trees"
-                              ),
-                        value = c(
-                                rf.full$mtry,
-                                rf.full$ntree,
-                                rf.full$type
-                              )
+      "mtry",
+      "number of trees",
+      "type of trees"
+    ),
+    value = c(
+      rf.full$mtry,
+      rf.full$ntree,
+      rf.full$type
+    )
     )
     vuStatsList[[algo]] <- rbind(vuStatsList[[algo]], algodat)
   }
@@ -377,14 +377,14 @@ if(mostPplotsAlgo == "rf"){
 
 for (plotpi in 1:numPPl){
   evar <- pplotVars$fullName[[plotpi]]
-
+  
   #get gridname
   grdName <- unique(varsImp.full[varsImp.full$fullName == evar, "gridName"])
   
   #dens data
   df.full <- rbind(df.in, df.abs)
   densdat <- data.frame(x = df.full[,grdName], pres = df.full[,"pres"])
-
+  
   # pplot data
   # do rf only if there are data
   if(exists("rf.pPlots")){
@@ -478,7 +478,7 @@ for (plotpi in 1:numPPl){
     }
   }
   
- pplot <- ggplot(data = dat, aes(x=x, y=y, color = algo)) + 
+  pplot <- ggplot(data = dat, aes(x=x, y=y, color = algo)) + 
     geom_line(size = 1) +
     xlab(evar) + 
     scale_x_continuous(limits = c(min(dat$x), max(dat$x)), 
@@ -488,9 +488,9 @@ for (plotpi in 1:numPPl){
           plot.margin = margin(t = 1, r = 5, b = 5, l = 5, unit = "pt"),
           text = element_text(size=8),
           panel.border = element_rect(colour = "black", fill=NA, size=0.25)
-          ) + 
+    ) + 
     scale_color_manual(values = scaleVec)
-
+  
   # create the density plot
   densplot <- ggplot(data = densdat, aes(x = x, color = factor(pres, labels = c("background","presence")))) + 
     geom_density(size = 0.5, show.legend = FALSE) + 
@@ -509,19 +509,19 @@ for (plotpi in 1:numPPl){
           axis.line.x = element_blank(),
           plot.margin = margin(t = 2, r = 0, b = 1, l = 0, unit = "pt")) +
     scale_color_manual(values=c("grey60", "black")) 
-    #theme_void()
-
+  #theme_void()
+  
   # now do the layout
   gdens <- ggplotGrob(densplot)
   gpplt <- ggplotGrob(pplot)
   panel_id <- gpplt$layout[gpplt$layout$name == "panel",c("t","l")]
   gpplt <- gtable_add_rows(gpplt, unit(0.25,"null"), 0)
   gpplt <- gtable_add_grob(gpplt, gdens,
-                       t = 1, l = panel_id$l)
+                           t = 1, l = panel_id$l)
   #grid.newpage()
   #grid.draw(gpplt)
   grobList[[plotpi]] <- gpplt
-
+  
   # if on loop with most lines, extract legends
   if(plotpi == plotForLeg){
     # Function to extract legend
@@ -548,12 +548,12 @@ for (plotpi in 1:numPPl){
             text = element_text(size=14))
     legend2 <- g_legend(legPlot2)
   }
-    
+  
 }
 
 # set up legend grobs
 legGb <- arrangeGrob(grobs=list(legend2, legend1), 
-                  layout_matrix=rbind(c(1,2)))
+                     layout_matrix=rbind(c(1,2)))
 
 # set up full figure
 gt <- arrangeGrob(grobs=grobList, 
@@ -581,7 +581,7 @@ dbDisconnect(db)
 
 ras <- raster(paste0("model_predictions/", rasName))
 
-studyAreaExtent <- st_read(here("_data","species",model_species,"inputs","model_input",paste0(model_run_name, "_studyArea.gpkg")), quiet = TRUE)
+studyAreaExtent <- st_read(here("_data","species",model_species,"inputs","model_input",paste0(baseName, "_studyArea.gpkg")), quiet = TRUE)
 referenceBoundaries <- st_read(nm_refBoundaries, quiet = TRUE) # name of state boundaries file
 
 # project to match raster, just in case
@@ -620,11 +620,11 @@ basetiles <- read_osm(bbox, type = mtype, ext = 1.1)
 mapFig <- qtm(basetiles) +
   tm_shape(ras) +
   tm_raster(palette = clrs, title = "modeled suitability",
-      labels = c("Low Habitat Suitability", rep(" ", nclr-2), "High Habitat Suitability")) +
+            labels = c("Low Habitat Suitability", rep(" ", nclr-2), "High Habitat Suitability")) +
   tm_shape(referenceBoundaries) +
   tm_borders(col = "grey", lwd = 1) +
   tm_shape(studyAreaExtent) +
-    tm_borders(col = "red", lwd = 2) +
+  tm_borders(col = "red", lwd = 2) +
   tm_compass(north = 0, type = "arrow", position = c("left","bottom")) +
   tm_scale_bar()
 
@@ -716,17 +716,17 @@ sdm.thresh.list <- lapply(sdm.thresh.list, FUN = function(x) x[,!names(x)=="algo
 #attr(sdm.thresh.list, "subheadings") <- paste0("Algorithm = ", names(sdm.thresh.list))
 # with colored text following lines on figures
 attr(sdm.thresh.list, "subheadings") <- paste0("\\textcolor{",
-                          names(sdm.thresh.list), "Color}{", 
-                          "Algorithm = ", 
-                          names(sdm.thresh.list),"}")
+                                               names(sdm.thresh.list), "Color}{", 
+                                               "Algorithm = ", 
+                                               names(sdm.thresh.list),"}")
 
 # can't get xtable's sanitize functions to work, manually escape % here. 
 # attr(sdm.thresh.list, "message") <- paste0(thresh.descr$cutCode, ": ",
 #                             gsub("%","\\%",thresh.descr$cutDescription, fixed = TRUE))
 
 sdm.thresh.list.xtbl <- xtableList(sdm.thresh.list, 
-                          align = "llrrr",
-                          digits=c(0,0,3,0,0))
+                                   align = "llrrr",
+                                   digits=c(0,0,3,0,0))
 
 thresh.descr.xtbl <- xtable(thresh.descr, 
                             align = "lllp{3in}")
