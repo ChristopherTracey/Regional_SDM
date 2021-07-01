@@ -7,6 +7,8 @@ rm(list=ls())
 
 # Step 1: Setting for the model run
 
+## NOTE: set up as template for github. Note general defaults and "<< >>" where text would be expected
+
 # species code (from lkpSpecies in modelling database. This will be the new folder name containing inputs/ouptuts)
 model_species <- "heucalba"
 # loc_scripts is your repository. Make sure your git repository is set to correct branch
@@ -36,7 +38,7 @@ nm_bkgExclAreas <- NULL
 # defining a distance-to raster here that defines the bias (e.g. distance to roads), will
 # subsample background points weighted by this bias)
 #  set to NULL if you don't want to define a bias file
-#nm_biasDistRas <- here("_data","other_spatial","raster","eucDist_AZ_roads.tif")
+#nm_biasDistRas <- here("_data","other_spatial","raster","eucDist_roads.tif")
 nm_biasDistRas <- NULL
 
 # project overview - this appears in the first paragraph of the metadata
